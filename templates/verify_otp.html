@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Verify OTP — Modest Sakina{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo">Modest <span>Sakina</span></div>
+    </div>
+    <div style="text-align:center;font-size:3rem;margin-bottom:15px;">📧</div>
+    <h2>Verify Your Email</h2>
+    <p class="subtitle">Enter the 6-digit OTP sent to <strong>{{ email }}</strong></p>
+
+    <form action="{{ url_for('auth.verify_otp_page', email=email) }}" method="POST">
+      <div class="form-group">
+        <label>OTP Code</label>
+        <input type="text" name="otp" class="form-control" required placeholder="Enter 6-digit OTP" maxlength="6" style="text-align:center;font-size:1.5rem;letter-spacing:8px;">
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;border:none;cursor:pointer;font-size:1rem;padding:14px;">
+        Verify OTP →
+      </button>
+    </form>
+
+    <div style="text-align:center;margin-top:20px;font-size:0.88rem;color:var(--text-light);">
+      Didn't receive it? <a href="{{ url_for('auth.resend_otp', email=email) }}" style="color:var(--gold);">Resend OTP</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

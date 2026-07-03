@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Modest Sakina — Elegant Hijab Collection{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="{{ url_for('index') }}" class="logo">Modest <span>Sakina</span></a>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('product.products') }}">Shop</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+      {% if session.get('user_id') %}
+      <li><a href="{{ url_for('auth.dashboard') }}">My Account</a></li>
+      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+      {% else %}
+      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+      <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+      {% endif %}
+    </ul>
+    <div class="nav-actions">
+      <a href="{{ url_for('product.cart') }}" class="cart-btn">
+        🛍 Cart <span class="cart-badge">{{ cart_count }}</span>
+      </a>
+      <a href="{{ url_for('admin.login') }}" style="font-size:0.78rem;color:var(--text-light);padding:8px 12px;border:1px solid var(--beige-dark);border-radius:20px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--beige-dark)';this.style.color='var(--text-light)'">⚙ Admin</a>
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div style="max-width:1200px;margin:0 auto;padding:0 20px;">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for item in messages %}
+        <div class="alert alert-{{ item[0] }}" style="margin-top:15px;">{{ item[1] }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+{% block content %}{% endblock %}
+
+<div class="features-strip">
+  <div class="container">
+    <div class="features-list">
+      <div class="feature-item"><span class="icon">🚚</span> Free Shipping over ₹999</div>
+      <div class="feature-item"><span class="icon">🔒</span> Secure Payment</div>
+      <div class="feature-item"><span class="icon">⭐</span> Premium Quality</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Modest <span>Sakina</span></div>
+        <p>Elegant, modest fashion for the modern Muslim woman. Handpicked hijab collections crafted with love.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <ul>
+          <li><a href="{{ url_for('product.products') }}">All Products</a></li>
+          <li><a href="{{ url_for('product.products') }}?category=Premium+Hijab">Premium Hijab</a></li>
+          <li><a href="{{ url_for('product.products') }}?category=Bridal+Hijab">Bridal Hijab</a></li>
+          <li><a href="{{ url_for('product.products') }}?category=Luxury+Hijab">Luxury Hijab</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Help</h5>
+        <ul>
+          <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="{{ url_for('terms') }}">Terms & Conditions</a></li>
+          <li><a href="{{ url_for('privacy') }}">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Modest Sakina. All rights reserved.</p>
+      <p>Made with ❤️ for modest fashion</p>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop">↑</button>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

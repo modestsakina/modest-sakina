@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}My Account — Modest Sakina{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>My Account</h1>
+  <p>Welcome back, {{ user.name }}</p>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="dashboard-grid">
+      <div class="dashboard-sidebar">
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="width:70px;height:70px;background:var(--gold-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 10px;">🧕</div>
+          <div style="font-weight:600;color:var(--dark);">{{ user.name }}</div>
+          <div style="font-size:0.85rem;color:var(--text-light);">{{ user.email }}</div>
+        </div>
+        <ul class="sidebar-nav">
+          <li><a href="{{ url_for('auth.dashboard') }}" class="active">📦 My Orders</a></li>
+          <li><a href="{{ url_for('product.products') }}">🛍 Shop</a></li>
+          <li><a href="{{ url_for('product.cart') }}">🛒 Cart ({{ cart_count }})</a></li>
+          <li><a href="{{ url_for('contact') }}">✉️ Contact Us</a></li>
+          <li><a href="{{ url_for('auth.logout') }}" style="color:#e74c3c!important;">🚪 Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="dashboard-main">
+        <h3 style="font-size:1.5rem;margin-bottom:25px;">Order History</h3>
+        {% if orders %}
+          {% for order in orders %}
+          <div class="order-card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+              <div>
+                <h5>Order #{{ order.order_id }}</h5>
+                <div style="font-size:0.9rem;margin-top:4px;color:var(--text);">{{ order.created_at }}</div>
+                <div style="font-size:0.9rem;color:var(--text-light);margin-top:4px;">
+                  Delivered to: {{ order.city }}, {{ order.country }}
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:1.1rem;font-weight:700;color:var(--gold-dark);">₹{{ order.total }}</div>
+                <div style="margin-top:5px;"><span class="order-status">{{ order.status|capitalize }}</span></div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state" style="padding:40px;">
+            <div class="icon">📦</div>
+            <h3>No orders yet</h3>
+            <p>Start shopping and your orders will appear here</p>
+            <a href="{{ url_for('product.products') }}" class="btn-primary">Shop Now</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

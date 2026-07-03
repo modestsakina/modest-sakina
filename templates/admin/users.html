@@ -1,0 +1,45 @@
+{% extends 'admin/base.html' %}
+{% block title %}Users{% endblock %}
+{% block page_title %}Registered Users ({{ users|length }}){% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-body" style="padding:0;">
+    {% if users %}
+    <table>
+      <thead>
+        <tr><th>#</th><th>Name</th><th>Email</th><th>Verified</th></tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td style="color:#aaa;font-size:0.8rem;">{{ loop.index }}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:36px;height:36px;background:#f0e2b0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;">🧕</div>
+              <strong>{{ user.name }}</strong>
+            </div>
+          </td>
+          <td style="color:#888;">{{ user.email }}</td>
+          <td>
+            {% if user.verified %}
+              <span class="badge badge-confirmed">✅ Verified</span>
+            {% else %}
+              <span class="badge badge-pending">⏳ Pending</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div style="text-align:center;padding:60px;color:#aaa;">
+      <div style="font-size:3rem;margin-bottom:15px;">👥</div>
+      <p>No registered users yet</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

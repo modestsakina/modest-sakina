@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmed — Modest Sakina{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="confirmation-box">
+      <div class="confirmation-icon">✅</div>
+      <h2>Order Confirmed!</h2>
+      <p style="font-size:1.1rem;margin-bottom:20px;">Thank you for shopping with Modest Sakina</p>
+
+      <div style="background:var(--beige-light);border-radius:12px;padding:25px;text-align:left;margin:25px 0;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.9rem;">
+          <div><strong>Order ID:</strong></div>
+          <div style="color:var(--gold-dark);font-weight:700;">#{{ order.order_id }}</div>
+          <div><strong>Customer:</strong></div>
+          <div>{{ order.user_name }}</div>
+          <div><strong>Email:</strong></div>
+          <div>{{ order.email }}</div>
+          <div><strong>Total Paid:</strong></div>
+          <div style="color:var(--gold-dark);font-weight:700;">₹{{ order.total }}</div>
+          <div><strong>Payment:</strong></div>
+          <div style="text-transform:capitalize;">{{ (order.get('payment_method') or 'N/A')|replace('_',' ') }}</div>
+          <div><strong>Status:</strong></div>
+          <div><span class="order-status">{{ order.status|capitalize }}</span></div>
+          <div><strong>Delivery to:</strong></div>
+          <div>{{ order.address }}, {{ order.city }}, {{ order.country }}</div>
+          <div><strong>Date:</strong></div>
+          <div>{{ order.created_at }}</div>
+        </div>
+      </div>
+
+      <p style="color:var(--text-light);font-size:0.9rem;margin-bottom:25px;">
+        A confirmation email will be sent to <strong>{{ order.email }}</strong>. Your order will arrive within 5–7 business days.
+      </p>
+
+      <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
+        <a href="{{ url_for('index') }}" class="btn-primary">Continue Shopping</a>
+        {% if session.get('user_id') %}
+        <a href="{{ url_for('auth.dashboard') }}" class="btn-secondary">View My Orders</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'admin/base.html' %}
+{% block title %}Orders{% endblock %}
+{% block page_title %}Orders ({{ orders|length }}){% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-body" style="padding:0;">
+    <div class="table-wrap">
+      {% if orders %}
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td><strong>#{{ order.order_id }}</strong></td>
+            <td>{{ order.user_name }}</td>
+            <td style="color:#888;font-size:0.83rem;">{{ order.email }}</td>
+            <td style="font-weight:700;color:#8b6914;">₹{{ order.total }}</td>
+            <td style="text-transform:capitalize;font-size:0.83rem;">{{ (order.get('payment_method') or 'N/A')|replace('_',' ') }}</td>
+            <td style="font-size:0.82rem;color:#888;">{{ order.created_at }}</td>
+            <td><span class="badge badge-{{ order.status }}">{{ order.status|capitalize }}</span></td>
+            <td>
+              <form method="POST" action="{{ url_for('admin.update_order_status', order_id=order._id) }}" style="display:flex;gap:5px;">
+                <select name="status" class="form-control" style="padding:5px 8px;font-size:0.8rem;width:120px;">
+                  <option value="confirmed" {{ 'selected' if order.status=='confirmed' }}>Confirmed</option>
+                  <option value="processing" {{ 'selected' if order.status=='processing' }}>Processing</option>
+                  <option value="shipped" {{ 'selected' if order.status=='shipped' }}>Shipped</option>
+                  <option value="delivered" {{ 'selected' if order.status=='delivered' }}>Delivered</option>
+                  <option value="cancelled" {{ 'selected' if order.status=='cancelled' }}>Cancelled</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-success">✓</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div style="text-align:center;padding:60px;color:#aaa;">
+        <div style="font-size:3rem;margin-bottom:15px;">📦</div>
+        <p>No orders yet</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

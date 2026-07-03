@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — Modest Sakina{% endblock %}
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{{ url_for('index') }}">Home</a>
+      <span>/</span>
+      <a href="{{ url_for('product.products') }}">Shop</a>
+      <span>/</span>
+      <a href="{{ url_for('product.products') }}?category={{ product.category }}">{{ product.category }}</a>
+      <span>/</span>
+      <span style="color:var(--text);">{{ product.name }}</span>
+    </div>
+
+    <div class="product-detail-grid">
+      <div class="detail-image">
+        <img src="{{ product.image }}" alt="{{ product.name }}" onerror="this.onerror=null;this.src='https://placehold.co/500x500/f5ede6/8b5e52?text=No+Image'">
+      </div>
+      <div class="detail-info">
+        <div class="category">{{ product.category }}</div>
+        <h1>{{ product.name }}</h1>
+        <div class="price">₹{{ product.price }}</div>
+        <p class="description">{{ product.description }}</p>
+
+        <div style="background:var(--beige-light);border-radius:10px;padding:15px;margin-bottom:25px;">
+          <div style="display:flex;gap:20px;font-size:0.88rem;color:var(--text-light);">
+            <span>✅ In Stock ({{ product.stock }} available)</span>
+            <span>🚚 Free shipping over ₹5000</span>
+          </div>
+        </div>
+
+        <form action="{{ url_for('product.add_to_cart') }}" method="POST">
+          <input type="hidden" name="product_id" value="{{ product._id }}">
+          <div class="qty-selector">
+            <label>Quantity:</label>
+            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="qty-input">
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;text-align:center;">🛍 Add to Cart</button>
+        </form>
+
+        <div style="margin-top:20px;padding:20px;background:var(--beige-light);border-radius:10px;">
+          <h4 style="margin-bottom:10px;font-size:1rem;">Product Details</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88rem;color:var(--text-light);">
+            <div><strong>Category:</strong> {{ product.category }}</div>
+            <div><strong>Price:</strong> ₹{{ product.price }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if related %}
+    <div style="margin-top:80px;">
+      <h2 style="margin-bottom:30px;font-size:2rem;">You May Also Like</h2>
+      <div class="products-grid">
+        {% for item in related %}
+        <div class="product-card">
+          <a href="{{ url_for('product.product_detail', product_id=item._id) }}">
+            <div class="product-image">
+              <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/500x500/f5ede6/8b5e52?text=No+Image'">
+            </div>
+          </a>
+          <div class="product-info">
+            <div class="product-category">{{ item.category }}</div>
+            <a href="{{ url_for('product.product_detail', product_id=item._id) }}">
+              <div class="product-name">{{ item.name }}</div>
+            </a>
+            <div class="product-footer">
+              <div class="product-price">₹{{ item.price }}</div>
+              <form action="{{ url_for('product.add_to_cart') }}" method="POST">
+                <input type="hidden" name="product_id" value="{{ item._id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="add-cart-btn">Add to Cart</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Shop — Modest Sakina{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>Our Collection</h1>
+  <p>Discover {{ products|length }} beautiful hijabs crafted for you</p>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <form action="{{ url_for('product.products') }}" method="GET" style="display:flex;align-items:center;gap:10px;margin-bottom:30px;flex-wrap:wrap;">
+      <div class="search-bar" style="margin:0;flex:1;max-width:none;">
+        <input type="text" name="search" placeholder="Search hijabs..." value="{{ search }}" class="search-input">
+        {% if selected_category %}
+        <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+        <button type="submit">Search</button>
+      </div>
+      {% if search or selected_category %}
+      <a href="{{ url_for('product.products') }}" class="btn-secondary" style="padding:12px 20px;white-space:nowrap;">Clear</a>
+      {% endif %}
+    </form>
+
+    <div class="filter-tabs">
+      <a href="{{ url_for('product.products') }}" class="filter-tab {% if not selected_category %}active{% endif %}">All</a>
+      {% for cat in categories %}
+      <a href="{{ url_for('product.products') }}?category={{ cat }}" class="filter-tab {% if selected_category == cat %}active{% endif %}">{{ cat }}</a>
+      {% endfor %}
+    </div>
+
+    {% if products %}
+    <div class="products-grid">
+      {% for product in products %}
+      <div class="product-card">
+        <a href="{{ url_for('product.product_detail', product_id=product._id) }}">
+          <div class="product-image">
+            <img src="{{ product.image }}" alt="{{ product.name }}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/500x500/f5ede6/8b5e52?text=No+Image'">
+          </div>
+        </a>
+        <div class="product-info">
+          <div class="product-category">{{ product.category }}</div>
+          <a href="{{ url_for('product.product_detail', product_id=product._id) }}">
+            <div class="product-name">{{ product.name }}</div>
+          </a>
+          <div class="product-desc">{{ product.description }}</div>
+          <div class="product-footer">
+            <div class="product-price">₹{{ product.price }}</div>
+            <form action="{{ url_for('product.add_to_cart') }}" method="POST">
+              <input type="hidden" name="product_id" value="{{ product._id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="add-cart-btn">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="icon">🔍</div>
+      <h3>No products found</h3>
+      <p>Try a different search or category</p>
+      <a href="{{ url_for('product.products') }}" class="btn-primary">View All Products</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock %}
