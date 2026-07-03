@@ -12,7 +12,9 @@ app = Flask(__name__)
 app.secret_key = 'modestsakina_secret_key_2024'
 app.permanent_session_lifetime = timedelta(days=7)
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/modest_sakina"
+import os
+
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 app.config["UPLOAD_FOLDER"] = os.path.join(os.path.dirname(__file__), "static", "uploads")
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
