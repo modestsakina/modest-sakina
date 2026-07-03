@@ -19,14 +19,15 @@ app.config["UPLOAD_FOLDER"] = os.path.join(os.path.dirname(__file__), "static", 
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
 # Mail Configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_TIMEOUT'] = 30
+app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER", "smtp-relay.brevo.com")
+app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT", 587))
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_TIMEOUT"] = 30
 
-app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME", "modestsakina@gmail.com")
-app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD", "aazy etfd gwnm dwvr")
-app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = app.config["MAIL_USERNAME"]
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
