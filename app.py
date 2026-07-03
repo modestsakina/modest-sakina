@@ -25,7 +25,7 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_TIMEOUT'] = 30
 
 app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME", "modestsakina@gmail.com")
-app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD", "YOUR_NEW_APP_PASSWORD")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD", "aazy etfd gwnm dwvr")
 app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
