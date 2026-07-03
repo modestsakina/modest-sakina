@@ -14,17 +14,18 @@ app.permanent_session_lifetime = timedelta(days=7)
 
 import os
 
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+app.config["UPLOAD_FOLDER"] = os.path.join(os.path.dirname(__file__), "static", "uploads")
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
+
+# Mail Configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_TIMEOUT'] = 30
 
-app.config['MAIL_USERNAME'] = os.getenv(
-    "MAIL_USERNAME", "modestsakina@gmail.com"
-)
-app.config['MAIL_PASSWORD'] = os.getenv(
-    "MAIL_PASSWORD", "axqv iqtl eprh pmwc"
-)
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME", "modestsakina@gmail.com")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD", "YOUR_NEW_APP_PASSWORD")
 app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
