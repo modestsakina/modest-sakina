@@ -9,7 +9,7 @@ def create_user(mongo, name, email, password):
         'name': name,
         'email': email,
         'password': hashed,
-        'verified': False,   # OTP verify hone tak False rahega
+        'verified': True,   # OTP verify hone tak False rahega
         'orders': []
     }
     result = mongo.db.users.insert_one(user)
