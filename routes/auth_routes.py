@@ -17,9 +17,23 @@ def get_mail():
 
 def send_otp_email(email, otp):
     mail = get_mail()
-    msg = Message('Your Modest Sakina Verification Code', recipients=[email])
-    msg.body = f"Your OTP is: {otp}\nThis code expires in 10 minutes.\n\n- Modest Sakina Team"
-    mail.send(msg)
+
+    print("MAIL_SERVER:", mail.server)
+    print("MAIL_PORT:", mail.port)
+    print("MAIL_USERNAME:", mail.username)
+
+    msg = Message(
+        "Your Modest Sakina Verification Code",
+        recipients=[email]
+    )
+    msg.body = f"Your OTP is: {otp}"
+
+    try:
+        mail.send(msg)
+        print("EMAIL SENT SUCCESSFULLY")
+    except Exception as e:
+        print("MAIL ERROR:", repr(e))
+        raise
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
