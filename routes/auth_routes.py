@@ -3,7 +3,8 @@ from models.user_model import (
     create_user, get_user_by_email, verify_password,
     generate_otp, set_otp, verify_otp
 )
-from flask_mail import Message
+import os
+import requests
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -16,24 +17,43 @@ def get_mail():
     return mail
 
 def send_otp_email(email, otp):
-    mail = get_mail()
+    api_key = os.getenv("BREVO_API_KEY")
 
-    print("MAIL_SERVER:", mail.server)
-    print("MAIL_PORT:", mail.port)
-    print("MAIL_USERNAME:", mail.username)
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
 
-    msg = Message(
-        "Your Modest Sakina Verification Code",
-        recipients=[email]
+    payload = {
+        "sender": {
+            "name": "Modest Sakina",
+            "email": "modestsakina@gmail.com"
+        },
+        "to": [
+            {
+                "email": email
+            }
+        ],
+        "subject": "Your Modest Sakina OTP",
+        "htmlContent": f"""
+        <h2>Modest Sakina</h2>
+        <p>Your OTP is:</p>
+        <h1>{otp}</h1>
+        <p>This OTP will expire in 10 minutes.</p>
+        """
+    }
+
+    response = requests.post(
+        "https://api.brevo.com/v3/smtp/email",
+        headers=headers,
+        json=payload
     )
-    msg.body = f"Your OTP is: {otp}"
 
-    try:
-        mail.send(msg)
-        print("EMAIL SENT SUCCESSFULLY")
-    except Exception as e:
-        print("MAIL ERROR:", repr(e))
-        raise
+    print("STATUS:", response.status_code)
+    print("BODY:", response.text)
+
+    response.raise_for_status()
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
